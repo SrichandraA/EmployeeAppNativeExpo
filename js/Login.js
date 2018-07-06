@@ -4,15 +4,63 @@ import { Container, Header, Content, TabHeading, Card, View, CardItem, Tab, Tabs
 import Expo from 'expo';
 import { Image, TouchableHighlight, Alert,Dimensions, TouchableOpacity ,StyleSheet,TextInput,KeyboardAvoidingView,ScrollView} from 'react-native';
 import { StatusBar } from "react-native";
+import Toast from 'react-native-simple-toast';
 
 
 export default class Login extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = { fontsAreLoaded: true };
-        
+        this.state = { fontsAreLoaded: true,id:'',password:'' };
+        this.onIdChange = this.onIdChange.bind(this);
+        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onLoginClick = this.onLoginClick.bind(this);
+    }
+    onIdChange(textId){
+        this.setState({id:textId});
+    }
+    onPasswordChange(textPassword){
+        this.setState({password:textPassword});
+    }
+    onLoginClick(){
+        fetch('http://192.168.43.75:3000/login', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Employee_ID: this.state.id,
+                Password: this.state.password
+            }),
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({
+                    isLoaded: true
+                    
+                }); 
+               if(result.message === 'success'){
+                this.props.navigation.navigate("ListOfEmployees")
+               }
+               else{
+                   Toast.show("Failed...Try Again..!");
+               }
+            },
 
+            (error) => {
+                Toast.show("Check ID and Password..!");
+
+                this.setState({
+                    isLoaded: false,	
+                });
+            }
+        );
+
+    }
+    componentDidMount(){
+        this.setState({id:'',password:''});
     }
     async componentWillMount() {
         await Expo.Font.loadAsync({
@@ -50,21 +98,25 @@ export default class Login extends React.Component {
                 <View style={{height:280,width:'90%',backgroundColor:'white',position:'absolute',borderRadius:5,alignSelf:'center',marginTop:'40%'}}>
                 <Form>
                     <Item floatingLabel primary style={{height:60}}>
-                        <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/username.png')}/> <Text style={{fontSize:14}}>   username</Text></Label>
-                        <Input keyboardType='email-address' />
+                        <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/username.png')}/> <Text style={{fontSize:14}}>   Employee ID</Text></Label>
+                        <Input keyboardType='numeric' onChangeText={this.onIdChange} require />
                     </Item>
                     <Item floatingLabel primary style={{height:60}}>
-                        <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/password.png')}/> <Text style={{fontSize:14}}>   password</Text></Label>
-                        <Input secureTextEntry require />
+                        <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/password.png')}/> <Text style={{fontSize:14}}>   Password</Text></Label>
+                        <Input secureTextEntry require onChangeText={this.onPasswordChange} />
                     </Item>
-                    <TouchableOpacity onPress={()=>this.props.navigation.navigate("ListOfEmployees")} >
+                    <TouchableOpacity onPress={()=>this.onLoginClick()} >
                             <View style={{height:40,width:130,flexDirection:'row',alignSelf:'center', marginLeft:15,marginTop:20, borderRadius:15, backgroundColor:'#E93F3F'}}>
                                 <Text style={{color:'white',fontWeight:'bold',fontSize:18, paddingLeft:'35%',fontFamily:'sans-serif-condensed',textAlignVertical:'center'}}>LOGIN</Text>
                             </View>
                     </TouchableOpacity>
  
                     </Form>
-                    <Text style={{color:'#E93F3F', fontSize:16,alignSelf:'center' ,marginTop:15 ,elevation:4 ,fontFamily:'sans-serif'}}>Not a Member...? Register Here!</Text>
+                    <TouchableOpacity onPress={()=>this.props.navigation.navigate("Registration")} >
+                            <View >
+                            <Text style={{color:'#E93F3F', fontSize:16,alignSelf:'center' ,marginTop:15 ,elevation:4 ,fontFamily:'sans-serif'}}>Not a Member...? Register Here!</Text>
+                            </View>
+                    </TouchableOpacity>
 
                 </View>
                 

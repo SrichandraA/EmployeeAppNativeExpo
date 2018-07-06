@@ -5,6 +5,7 @@ import { Image, TouchableHighlight, Alert,Dimensions } from 'react-native';
 import {StackNavigator,TabNavigator} from 'react-navigation';
 import Login from './Login';
 import ListOfEmployees from './ListOfEmployees';
+import Registration from './Registration';
 export default class MainActivity extends Component {
 
   render() {
@@ -29,6 +30,13 @@ const AppNavigator = StackNavigator({
         header: { visible: false },
         navigationOptions: {
             title: 'list of Employees',
+            header: null
+        }},
+
+    Registration:{screen: Registration,
+        header: { visible: false },
+        navigationOptions: {
+            title: 'Registration',
             header: null
         }},
     

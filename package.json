@@ -30,6 +30,7 @@
     "react-native-phone-call": "^1.0.7",
     "react-native-popup-dialog": "^0.14.52",
     "react-native-send-intent": "^1.0.26",
+    "react-native-simple-toast": "0.0.8",
     "react-navigation": "^2.5.5"
   }
 }
