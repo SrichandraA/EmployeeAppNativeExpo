@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Container, Header, Content, TabHeading, Card, View, CardItem, Tab, Tabs, Thumbnail, Button, 
     Text ,Form, Item, Input,Left, Body, Right, Icon, Title, Label,Picker } from 'native-base';
 import Expo from 'expo';
-import { Image, TouchableHighlight, Alert,Dimensions, TouchableOpacity ,StyleSheet,TextInput,KeyboardAvoidingView,ScrollView} from 'react-native';
+import { Image, TouchableHighlight, Alert,Dimensions, TouchableOpacity ,
+    StyleSheet,TextInput,KeyboardAvoidingView,ScrollView,BackHandler} from 'react-native';
 import { StatusBar } from "react-native";
 import Toast from 'react-native-simple-toast';
 
@@ -22,8 +23,9 @@ export default class Login extends React.Component {
     onPasswordChange(textPassword){
         this.setState({password:textPassword});
     }
+
     onLoginClick(){
-        fetch('http://192.168.43.75:3000/login', {
+        fetch('http://192.168.0.5:3000/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -59,10 +61,13 @@ export default class Login extends React.Component {
         );
 
     }
-    componentDidMount(){
-        this.setState({id:'',password:''});
-    }
+
+ 
+
+
+
     async componentWillMount() {
+
         await Expo.Font.loadAsync({
           'Roboto': require('native-base/Fonts/Roboto.ttf'),
           'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
@@ -89,7 +94,9 @@ export default class Login extends React.Component {
             <ScrollView >
 
                 <View style={{width:'100%',height:800,backgroundColor:'white'}}>
-                <View style={{width:'100%',height:800,backgroundColor:'black' , position:'absolute',opacity:0.4}}>
+                <Image resizeMode='cover' style={{ width:'100%',height:'100%', position: 'absolute',  left: 0 }} source={require('../pics/logback.jpg')}/>
+
+                <View style={{width:'100%',height:800, position:'absolute',backgroundColor:'black',opacity:0.4}}>
 
                 </View>
                 <Text style={{fontSize:32, marginTop:10, marginBottom:10,fontWeight:'bold',color:'white', alignSelf:'center' ,elevation:4 ,fontFamily:'sans-serif-condensed'}}>WELCOME!</Text>
@@ -99,7 +106,7 @@ export default class Login extends React.Component {
                 <Form>
                     <Item floatingLabel primary style={{height:60}}>
                         <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/username.png')}/> <Text style={{fontSize:14}}>   Employee ID</Text></Label>
-                        <Input keyboardType='numeric' onChangeText={this.onIdChange} require />
+                        <Input keyboardType='numeric' onChangeText={this.onIdChange} value={this.state.id} require />
                     </Item>
                     <Item floatingLabel primary style={{height:60}}>
                         <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/password.png')}/> <Text style={{fontSize:14}}>   Password</Text></Label>

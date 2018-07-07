@@ -11,15 +11,24 @@ export default class Registration extends React.Component {
 
     constructor(props){
         super(props);
-        this.state = { fontsAreLoaded: true,id:'',password:'',phone:'',name:'' };
+        this.state = { fontsAreLoaded: true,id:'',password:'',phone:'',name:'',department:'' };
         this.onEmployeeIDChange = this.onEmployeeIDChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onRegisterClick = this.onRegisterClick.bind(this);
         this.onEmployeeNameChange = this.onEmployeeNameChange.bind(this);
         this.onEmployeePhoneChange = this.onEmployeePhoneChange.bind(this);
+        this.onEmployeeEmailChange = this.onEmployeeEmailChange.bind(this);
+        this.onEmployeeDepartmentChange = this.onEmployeeDepartmentChange.bind(this);
+
     }
     onEmployeeIDChange(textId){
         this.setState({id:textId});
+    }
+    onEmployeeDepartmentChange(textDepartment){
+        this.setState({department:textDepartment});
+    }
+    onEmployeeEmailChange(textEmail){
+        this.setState({email:textEmail});
     }
     onPasswordChange(textPassword){
         this.setState({password:textPassword});
@@ -31,8 +40,8 @@ export default class Registration extends React.Component {
         this.setState({phone:textPhone});
     }
     onRegisterClick(){
-        this.setState({id:'',password:'',name:'',phone:''});
-        fetch('http://192.168.43.75:3000/register', {
+        this.setState({id:'',password:'',name:'',phone:'',email:''});
+        fetch('http://192.168.0.5:3000/register', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -42,7 +51,9 @@ export default class Registration extends React.Component {
                 Employee_ID: this.state.id,
                 Password: this.state.password,
                 Name:this.state.name,
-                Phone:this.state.phone
+                Phone:this.state.phone,
+                Email_ID:this.state.email,
+                Department:this.state.department
             }),
         })
         .then(res => res.json())
@@ -96,14 +107,16 @@ export default class Registration extends React.Component {
             </Header>
             <ScrollView >
 
-                <View style={{width:'100%',height:800,backgroundColor:'white'}}>
-                <View style={{width:'100%',height:800,backgroundColor:'black' , position:'absolute',opacity:0.4}}>
+                <View style={{width:'100%',height:900,backgroundColor:'white'}}>
+                <Image resizeMode='cover' style={{ width:'100%',height:'100%', position: 'absolute',  left: 0 }} source={require('../pics/logback.jpg')}/>
+
+                <View style={{width:'100%',height:900,backgroundColor:'black' , position:'absolute',opacity:0.4}}>
 
                 </View>
                 <Text style={{fontSize:32, marginTop:10, marginBottom:10,fontWeight:'bold',color:'white', alignSelf:'center' ,elevation:4 ,fontFamily:'sans-serif-condensed'}}>HI EMPLOYEE..!</Text>
                 <Text style={{color:'white', fontSize:14,alignSelf:'center' ,elevation:4 ,fontFamily:'sans-serif'}}>Fill The Details ...</Text>
 
-                <View style={{height:400,width:'90%',backgroundColor:'white',position:'absolute',borderRadius:5,alignSelf:'center',marginTop:'40%'}}>
+                <View style={{height:530,width:'90%',backgroundColor:'white',position:'absolute',borderRadius:5,alignSelf:'center',marginTop:'40%'}}>
                 <Form>
                     <Item floatingLabel primary style={{height:60}}>
                         <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/employeeid.png')}/> <Text style={{fontSize:14}}>   Employee ID</Text></Label>
@@ -114,8 +127,16 @@ export default class Registration extends React.Component {
                         <Input keyboardType='default' onChangeText={this.onEmployeeNameChange} require />
                     </Item>
                     <Item floatingLabel primary style={{height:60}}>
+                        <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/department.png')}/> <Text style={{fontSize:14}}>   Employee Department</Text></Label>
+                        <Input keyboardType='default' onChangeText={this.onEmployeeDepartmentChange} require />
+                    </Item>
+                    <Item floatingLabel primary style={{height:60}}>
                         <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/phone.png')}/> <Text style={{fontSize:14}}>   Employee Phone</Text></Label>
                         <Input keyboardType='numeric' onChangeText={this.onEmployeePhoneChange} require />
+                    </Item>
+                    <Item floatingLabel primary style={{height:60}}>
+                        <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/email.png')}/> <Text style={{fontSize:14}}>   Employee Email</Text></Label>
+                        <Input keyboardType='email-address' onChangeText={this.onEmployeeEmailChange} require />
                     </Item>
                     <Item floatingLabel primary style={{height:60}}>
                         <Label style={{top:15,height:40}} ><Image style={{ width:40,height:40,top:20}}source={require('../pics/password.png')}/> <Text style={{fontSize:14}}>   Password</Text></Label>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, TabHeading, Card, View, ActionSheet ,List,ListItem ,CardItem, Tab, Tabs, Thumbnail, Button, Text ,Form, Item, Input,Left, Body, Right, Icon, Title } from 'native-base';
 import Expo from 'expo';
-import { Image, TouchableHighlight, Alert,Dimensions ,StyleSheet, TextInput,FlatList,TouchableOpacity} from 'react-native';
+import { Image, TouchableHighlight, Alert,Dimensions ,
+    StyleSheet, TextInput,FlatList,TouchableOpacity,BackHandler} from 'react-native';
 // import RNNode from "react-native-node";
 import GridLayout from 'react-native-layout-grid';
 import MyListItem from './MyListItem';
@@ -14,17 +15,37 @@ import Toast from 'react-native-simple-toast';
 
 export default class ListOfEmployees extends React.Component {
     componentDidMount() {
-        this.onStart();
+        this.backHandler= BackHandler.addEventListener('hardwareBackPress', () => {
+            Alert.alert(
+                'Exit App',
+                'Exiting the application?', [{
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                }, {
+                    text: 'OK',
+                    onPress: () => BackHandler.exitApp()
+                }, ], {
+                    cancelable: false
+                }
+             )
+             return true;
+          });        
+          this.onStart();
 
     }
+    componentWillUnmount() {
+        this.backHandler.remove();
+      }
 
+  
     constructor(props){
 	    super(props);
 		this.state = {value:'',addresses:[],list:'',isLoaded:false};
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onStart = this.onStart.bind(this);
         this.onEnd = this.onEnd.bind(this);
-        
+
     }
     renderGridItem = (item) => (
        
@@ -33,10 +54,10 @@ export default class ListOfEmployees extends React.Component {
         >
             <View style={styles.item}  >
                 <Text note ellipsizeMode='tail' numberOfLines={1} style={styles.id}>
-                    {item && item.Department}
+                    {item && item.Name}
                 </Text>
                 <Text ellipsizeMode='tail' numberOfLines={1} style={styles.name}>
-                    {item && item.Name }
+                    {item && item.Department }
                 </Text>
                 <Text ellipsizeMode='tail' numberOfLines={1} note style={styles.note}>
                 {item && item.Mobile_Number}
@@ -44,9 +65,9 @@ export default class ListOfEmployees extends React.Component {
             </View>
         </TouchableOpacity>
     );
-    
+
     onStart(){
-        fetch("http://192.168.43.75:3000/employee")
+        fetch("http://192.168.0.5:3000/employee")
         .then(res => res.json())
         .then(
             (result) => {
@@ -71,8 +92,7 @@ export default class ListOfEmployees extends React.Component {
     }
 
     onEnd(){
-        console.log("eee");
-        fetch("http://192.168.43.75:3000/logout")
+        fetch("http://192.168.0.5:3000/logout")
         .then(res => res.json())
         .then(
             (result) => {
@@ -103,7 +123,7 @@ export default class ListOfEmployees extends React.Component {
 
             }
             else{
-                // fetch("http://192.168.43.75:3000/employee")
+                // fetch("http://192.168.0.5:3000/employee")
 				// .then(res => res.json())
 				// .then(
 				// 	(result) => {
@@ -124,7 +144,7 @@ export default class ListOfEmployees extends React.Component {
 				// 		});
 				// 	}
                 // )
-                fetch('http://192.168.43.75:3000/employee', {
+                fetch('http://192.168.0.5:3000/employee', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -184,7 +204,7 @@ export default class ListOfEmployees extends React.Component {
     var items = [{'emp_name':'fdd'},{'emp_name':'aee'}];
     // this.state.addresses.push({"hi":"bye"});
 
-    //console.log((this.state.addresses));
+    // console.log((this.state.addresses));
     const screenHT = Dimensions.get('window').height;
     const screenWT = Dimensions.get('window').width;
     return (

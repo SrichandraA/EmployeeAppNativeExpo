@@ -7,8 +7,8 @@ export default class Splash extends React.Component {
   render() {
     return (
         <Container>
-        <View style={{width:'100%',height:'100%',}}>
-                {/* <Image style={{ width:'100%',height:'100%', position: 'absolute', top: 0, left: 0 }} source={require('../pics/splash.png')}/> */}
+        <View style={{width:'100%',height:'100%',backgroundColor:'black'}}>
+                <Image style={{ width:'100%',height:'100%',resizeMode:'contain', position: 'absolute', top: 0, left: 0 }} source={require('../pics/splash2.jpg')}/>
                 <Text>Splash</Text>
             </View>          
       </Container>
